@@ -133,6 +133,7 @@ for($i = 0; $i < 4; $i++){
             <tr>
                 <td>Subtotal GRAVADO</td>
                 <td><?= "$" . $sub_gravado; ?></td>
+                <td><?= "$" . $sub_gravado + ($sub_gravado*0.13) . " (Incluyendo IVA)"; ?></td>
             </tr>
             
             <tr>
