@@ -1,0 +1,3 @@
+crear imagen
+
+docker build -t vv23011-server-php
