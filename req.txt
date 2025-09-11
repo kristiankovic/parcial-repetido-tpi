@@ -1,3 +1,7 @@
 crear imagen
 
 docker build -t vv23011-server-php
+
+crear contenedor
+
+docker run -d --name vv23011-contenedor-server -p 8080:80 -v .:/var/www/html vv23011-server-php

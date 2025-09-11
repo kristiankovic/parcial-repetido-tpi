@@ -87,7 +87,18 @@ $factura = [
     ]
 ];
 
+$sub_gravado = 0;
+$sub_exento = 0;
 
+for($i = 0; $i < 4; $i++){
+    if($factura["items"][$i]["tipoTributo"] == "GRAVADO"){
+        $sub_gravado += $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"];
+    }
+
+    else{
+        $sub_exento += $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,18 +113,33 @@ $factura = [
         <legend>Calculos</legend>
 
         <thead>
-            <th>
-                <td>Calculo importe</td>
-            </th>
+            <th>Producto</th>
+            <th>Calculo importa (precioUnitario * cantidad)</th>
+            <th>Condicion tributaria</th>
         </thead>
+
         <tbody>
             <tr>
                 <?php for($i=0; $i < 4; $i++) :?>
-                <td><?= $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"]?></td>
+                    <tr>
+                        <td><?= $factura["items"][$i]["descripcion"] ?></td>
+                        <td><?= "$" . $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"]?></td>
+                        <td><?= $factura["items"][$i]["tipoTributo"] ?></td>
+                    </tr>
                 <?php endfor; ?>
             </tr>
         </tbody>
-        <tfoot></tfoot>
+        <tfoot>
+            <tr>
+                <td>Subtotal GRAVADO</td>
+                <td><?= "$" . $sub_gravado; ?></td>
+            </tr>
+            
+            <tr>
+                <td>Subtotal EXENTO</td>
+                <td> <?= "$" . $sub_exento ?></td>
+            </tr>
+        </tfoot>
     </table>
 </head>
 <body>
