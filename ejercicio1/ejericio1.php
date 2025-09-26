@@ -16,6 +16,7 @@ $factura = [
         'nombre'    => 'Constructora Los Pinos',
         'nit'       => '0614-120987-102-5',
         'nrc'       => '765432-1',
+        'giro'      => '',
         'direccion' => 'Col. Escalón, Pasaje 3, San Salvador, SV',
         'telefono'  => '+503 2222-3333',
         'email'     => 'compras@lospinos.sv',
@@ -30,7 +31,7 @@ $factura = [
         'moneda'          => 'USD',
         'condicionPago'   => 'CONTADO', // CONTADO | CREDITO
         'diasCredito'     => 0,         // usar si condicionPago = CREDITO
-        'formaPago'       => 'EFECTIVO',// EFECTIVO | TARJETA | TRANSFERENCIA
+        'formaPago'       => 'EFECTIVO', // EFECTIVO | TARJETA | TRANSFERENCIA
         'observaciones'   => 'Entrega inmediata. Garantía de fábrica 6 meses.'
     ],
 
@@ -87,15 +88,14 @@ $factura = [
     ]
 ];
 
+
 $sub_gravado = 0;
 $sub_exento = 0;
 
-for($i = 0; $i < 4; $i++){
-    if($factura["items"][$i]["tipoTributo"] == "GRAVADO"){
+for ($i = 0; $i < 4; $i++) {
+    if ($factura["items"][$i]["tipoTributo"] == "GRAVADO") {
         $sub_gravado += $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"];
-    }
-
-    else{
+    } else {
         $sub_exento += $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"];
     }
 }
@@ -103,6 +103,7 @@ for($i = 0; $i < 4; $i++){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,40 +111,135 @@ for($i = 0; $i < 4; $i++){
     <title>Document</title>
 
     <table>
-        <legend>Calculos</legend>
+        <caption>Cálculos</caption>
 
         <thead>
             <th>Producto</th>
-            <th>Calculo importa (precioUnitario * cantidad)</th>
+            <th>Calculo importe</th>
             <th>Condicion tributaria</th>
         </thead>
 
         <tbody>
             <tr>
-                <?php for($i=0; $i < 4; $i++) :?>
-                    <tr>
-                        <td><?= $factura["items"][$i]["descripcion"] ?></td>
-                        <td><?= "$" . $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"]?></td>
-                        <td><?= $factura["items"][$i]["tipoTributo"] ?></td>
-                    </tr>
-                <?php endfor; ?>
+                <?php for ($i = 0; $i < 4; $i++) : ?>
+            <tr>
+                <td><?= $factura["items"][$i]["descripcion"] ?></td>
+                <td><?= "$" . $factura["items"][$i]["cantidad"] * $factura["items"][$i]["precioUnitario"] ?></td>
+                <td><?= $factura["items"][$i]["tipoTributo"] ?></td>
             </tr>
+        <?php endfor; ?>
+        </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td>Subtotal GRAVADO</td>
                 <td><?= "$" . $sub_gravado; ?></td>
-                <td><?= "$" . $sub_gravado + ($sub_gravado*0.13) . " (Incluyendo IVA)"; ?></td>
+                <td><?= "$" . round($sub_gravado + ($sub_gravado * 0.13), 2) . " (Incluyendo IVA)"; ?></td>
             </tr>
-            
+
             <tr>
                 <td>Subtotal EXENTO</td>
+                <td></td>
                 <td> <?= "$" . $sub_exento ?></td>
+            </tr>
+
+            <tr>
+                <td>Cargos adicionales</td>
+                <td style="background-color: blue;"><?= $factura["cargos"][0]["descripcion"]; ?></td>
+                <td><?= "$" . $factura["cargos"][0]["monto"]; ?></td>
+            </tr>
+
+            <tr>
+                <td>Subtotal general</td>
+                <td></td>
+                <td><?= "$" . $sub_exento + $sub_gravado; ?></td>
+            </tr>
+
+            <tr>
+                <td>Total descuentos</td>
+                <td></td>
+                <td><?= "$0.00" ?></td>
+            </tr>
+
+            <tr>
+                <td>Total de IVA a pagar</td>
+                <td></td>
+                <td><?= "$" . round(($sub_exento + $sub_gravado) * 0.13, 2); ?></td>
+            </tr>
+
+            <tr style="background-color: cornflowerblue; color: black;">
+                <td>Total a Pagar</td>
+                <td></td>
+                <td style="background-color: rgb(43, 42, 42); color: white;"><?= "$" . ($sub_exento + $sub_gravado) + round(($sub_exento + $sub_gravado) * 0.13, 2); ?></td>
             </tr>
         </tfoot>
     </table>
+
+    <div class="caja">
+
+        <table>
+            <caption>Detalles de factura</caption>
+
+            <tr>
+                <td style="background-color: yellow;"></td>
+                <td>Nombre</td>
+                <td>NIT</td>
+                <td>NRC</td>
+                <td>Giro</td>
+                <td>Dirección</td>
+                <td>Telefóno</td>
+                <td>Email</td>
+
+            </tr>
+            <tr>
+                <th>EMISOR</th>
+                <?php foreach ($factura["emisor"] as $detalle) : ?>
+                    <td><?= $detalle; ?></td>
+                <?php endforeach; ?>
+            </tr>
+
+            <tr>
+                <th>RECEPTOR</th>
+                <?php foreach ($factura["receptor"] as $detalle) : ?>
+                    <td><?= $detalle; ?></td>
+                <?php endforeach; ?>
+            </tr>
+
+            <tr>
+                <th>SERIE</th>
+                <td colspan="7"><?= $factura["encabezado"]["serie"]; ?></td>
+            </tr>
+
+            <tr>
+                <th>NÚMERO</th>
+                <td colspan="7"><?= $factura["encabezado"]["numero"]; ?></td>
+            </tr>
+
+            <tr>
+                <th>FECHA</th>
+                <td colspan="7"><?= $factura["encabezado"]["fechaEmision"]; ?></td>
+            </tr>
+
+            <tr>
+                <th>MONEDA</th>
+                <td colspan="7"><?= $factura["encabezado"]["moneda"]; ?></td>
+            </tr>
+
+            <tr>
+                <th>CONDICIÓN</th>
+                <td colspan="7"><?= $factura["encabezado"]["condicionPago"]; ?></td>
+            </tr>
+
+            <tr>
+                <th>FORMA DE PAGO</th>
+                <td colspan="7"><?= $factura["encabezado"]["formaPago"]; ?></td>
+            </tr>
+        </table>
+    </div>
 </head>
+
 <body>
-    
+
 </body>
+
 </html>

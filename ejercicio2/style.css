@@ -1,0 +1,109 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1.2rem;
+}
+
+body{
+    display: grid;
+    grid-template-areas: 'caja caja';
+
+    gap: 20px;
+}
+
+.caja{
+    grid-area: 'caja';
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    width: 700px;
+    padding: 20px;
+}
+
+form h2{
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+form input{
+    padding: 10px;
+    width: 100%;
+
+    border: 0;
+    border-bottom: 1px solid black;
+}
+
+form button{
+    width: 100%;
+    height: 45px;
+
+    background-color: blue;
+    color: white;
+
+    margin-top: 50px;
+}
+
+form button:hover{
+    background-color: rgb(7, 7, 174);
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+table{
+    border-collapse: collapse;
+
+}
+
+table caption{
+    padding: 10px;
+}
+
+table thead{
+    background-color: yellow;
+    color: black;
+} 
+
+table th{
+    border: 1px solid black;
+    padding: 10px;
+}
+table td{
+    background-color: rgb(39, 37, 37);
+    text-align: center;
+    color: white;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.tramo1{
+    background-color: rgb(66, 66, 212);
+    color: white;
+    padding: 10px;
+}
+
+.tramo2{
+    background-color: darkblue;
+    color: white;
+    padding: 10px;
+}
+
+.tramo3{
+    background-color: darkgreen;
+    color: white;
+    padding: 10px;
+}
+
+.tramo4{
+    background-color: darkred;
+    color: white;
+    padding: 10px;
+}
